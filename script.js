@@ -1,4 +1,4 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzArX14knfikt6_SsQjnW88b9jrvoAeH9qmA-mjmdMs98P071OSIOgdtHPLS0yV69i9Ng/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
 
 const usernameInput = document.getElementById('username');
 const startBtn = document.getElementById('startBtn');
@@ -9,51 +9,46 @@ const resultMessage = document.getElementById('resultMessage');
 
 let currentSpins = 0;
 
+const prizes = [
+  { code: "Voucher 1.000.000đ", percent: 0.5 },
+  { code: "Voucher 500.000đ", percent: 2 },
+  { code: "Voucher 300.000đ", percent: 5 },
+  { code: "Voucher 200.000đ", percent: 5 },
+  { code: "Voucher 100.000đ", percent: 10 },
+  { code: "Voucher 50.000đ", percent: 10 },
+  { code: "Voucher 20.000đ", percent: 17.5 },
+  { code: "Voucher 10.000đ", percent: 50 }
+];
+
 startBtn.addEventListener('click', async () => {
   const username = usernameInput.value.trim();
   if (!username) {
-    alert("Vui lòng nhập username!");
+    alert("Vui lòng nhập mã nhân sự!");
     return;
   }
 
-  spinInfo.textContent = "Đang kiểm tra lượt quay...";
+  spinInfo.textContent = "Đang kiểm tra...";
   try {
     const res = await fetch(`${SCRIPT_URL}?action=getSpins&username=${encodeURIComponent(username)}`);
     const data = await res.json();
-    if (data.error || data.spins === undefined) {
-      spinInfo.textContent = "Không tìm thấy username hoặc lỗi server.";
-      spinBtn.disabled = true;
-    } else {
+    if (data.success && data.spins !== undefined) {
       currentSpins = data.spins;
-      if (currentSpins > 0) {
-        spinInfo.textContent = `Bạn còn ${currentSpins} lượt quay.`;
-        spinBtn.disabled = false;
-      } else {
-        spinInfo.textContent = "Bạn đã hết lượt quay.";
-        spinBtn.disabled = true;
-      }
+      spinInfo.textContent = `Bạn còn ${currentSpins} lượt quay.`;
+      spinBtn.disabled = currentSpins <= 0;
+    } else {
+      spinInfo.textContent = "Không tìm thấy mã nhân sự.";
+      spinBtn.disabled = true;
     }
   } catch (err) {
     console.error(err);
-    spinInfo.textContent = "Lỗi kết nối server.";
+    spinInfo.textContent = "Lỗi kết nối.";
   }
 });
 
 spinBtn.addEventListener('click', async () => {
   if (currentSpins <= 0) return;
-
   spinBtn.disabled = true;
-
-  const prizes = [
-    { code: "A+", percent: 0.5 },
-    { code: "A", percent: 2 },
-    { code: "B", percent: 5 },
-    { code: "C", percent: 5 },
-    { code: "D", percent: 10 },
-    { code: "E", percent: 10 },
-    { code: "F", percent: 17.5 },
-    { code: "G", percent: 50 }
-  ];
+  resultMessage.textContent = "";
 
   let r = Math.random() * 100;
   let selectedPrize = prizes.find(p => {
@@ -61,28 +56,24 @@ spinBtn.addEventListener('click', async () => {
     return r < 0;
   }) || prizes[prizes.length - 1];
 
-  // Xoay vòng quay
-  let angle = prizes.slice(0, prizes.indexOf(selectedPrize)).reduce((sum, p) => sum + p.percent, 0) * 3.6;
-  angle += Math.random() * selectedPrize.percent * 3.6;
-  let rotateAngle = 1800 + angle;
-  wheel.style.transform = `rotate(${rotateAngle}deg)`;
+  const index = prizes.indexOf(selectedPrize);
+  const baseDeg = 360 / prizes.length;
+  const rotateDeg = 1800 + index * baseDeg + Math.random() * baseDeg;
+  wheel.style.transform = `rotate(${rotateDeg}deg)`;
 
-  setTimeout(() => {
-    if (selectedPrize.code === "G") {
-      resultMessage.textContent = "Chúc may mắn lần sau!";
-    } else {
-      resultMessage.textContent = `Chúc mừng! Bạn trúng giải ${selectedPrize.code}`;
-    }
-  }, 4000);
-
-  // Gửi log
   try {
-    const res = await fetch(`${SCRIPT_URL}?action=spin&username=${encodeURIComponent(usernameInput.value.trim())}&prize=${selectedPrize.code}`);
+    const res = await fetch(`${SCRIPT_URL}?action=spin&username=${encodeURIComponent(usernameInput.value.trim())}`);
     const data = await res.json();
-    currentSpins = data.spins || 0;
-    spinInfo.textContent = currentSpins > 0 ? `Bạn còn ${currentSpins} lượt quay.` : "Bạn đã hết lượt quay.";
+    if (data.success) {
+      resultMessage.textContent = `Bạn trúng: ${selectedPrize.code}`;
+      currentSpins = data.spins;
+      spinInfo.textContent = currentSpins > 0 ? `Bạn còn ${currentSpins} lượt quay.` : "Bạn đã hết lượt quay.";
+    } else {
+      resultMessage.textContent = "Lỗi khi quay.";
+    }
   } catch (err) {
-    console.error("Log lỗi:", err);
+    console.error(err);
+    resultMessage.textContent = "Lỗi kết nối khi quay.";
   }
 
   setTimeout(() => {
