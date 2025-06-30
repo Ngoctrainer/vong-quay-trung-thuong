@@ -1,31 +1,25 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzgSbNlz7pa9ym0NPvhtIyd7TX4RjvfozpYRZE2u7Erl_I3jZ4oIBpslTIkfqUp2zeL_w/exec"; // Thay bằng link Apps Script của bạn
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw9Dgjdy71QzIuUkItqHuWbZ0SHbiOJSSCnv2g9Ok65a0KQ_wYtJFaeE2LmvMrMrxep5Q/exec"; // Thay bằng link Apps Script của bạn
 
+// Gọi khi vòng quay được tạo ra, hoặc ngay sau khi DOM load
 const prizes = [
-  { code: "A+", label: "1M", percent: 0.5 },
-  { code: "A", label: "500K", percent: 2 },
-  { code: "B", label: "300K", percent: 5 },
-  { code: "C", label: "200K", percent: 5 },
-  { code: "D", label: "100K", percent: 10 },
-  { code: "E", label: "50K", percent: 10 },
-  { code: "F", label: "20K", percent: 17.5 },
-  { code: "G", label: "10K", percent: 50 }
+  { label: 'Voucher 1.000.000đ' },
+  { label: 'Voucher 500.000đ' },
+  { label: 'Voucher 300.000đ' },
+  { label: 'Voucher 200.000đ' },
+  { label: 'Voucher 100.000đ' },
+  { label: 'Voucher 50.000đ' },
+  { label: 'Voucher 20.000đ' },
+  { label: 'Voucher 10.000đ' }
 ];
 
-const usernameInput = document.getElementById('username');
-const startBtn = document.getElementById('startBtn');
-const spinBtn = document.getElementById('spinBtn');
-const spinInfo = document.getElementById('spinInfo');
-const wheel = document.getElementById('wheel');
-const resultMessage = document.getElementById('resultMessage');
-
 const baseDeg = 360 / prizes.length;
+const wheel = document.getElementById('wheel');
 
-// Tạo label động
 prizes.forEach((p, i) => {
   const label = document.createElement('div');
   label.className = 'label';
   label.innerText = p.label;
-  label.style.transform = `rotate(${i * baseDeg + baseDeg / 2}deg) translate(120px) rotate(-${i * baseDeg + baseDeg / 2}deg)`;
+  label.style.transform = `rotate(${i * baseDeg + baseDeg / 2}deg) translate(100px) rotate(-${i * baseDeg + baseDeg / 2}deg)`;
   wheel.appendChild(label);
 });
 
