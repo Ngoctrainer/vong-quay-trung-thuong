@@ -46,12 +46,10 @@ h1 {
 
 .label {
   position: absolute;
-  top: 50%;
   left: 50%;
+  top: 50%;
   transform-origin: 0 0;
-  font-size: 14px;
   font-weight: bold;
-  color: #fff;
-  pointer-events: none;
-  text-shadow: 1px 1px 2px #000;
+  color: white;
 }
+
