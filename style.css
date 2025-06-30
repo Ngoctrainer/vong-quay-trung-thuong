@@ -14,17 +14,15 @@ h1 {
 }
 
 .pointer {
-  display: none; /* Ẩn luôn mũi tên đen */
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 30px solid black;
+  position: absolute;
+  top: 30px;
+  left: calc(50% - 15px);
 }
-
-#resultMessage {
-  margin-top: 30px;  /* Cách vòng quay xa hơn (có thể tăng giá trị nếu muốn) */
-  font-size: 20px;   /* To hơn */
-  font-weight: bold; /* In đậm */
-  color: #333;       /* Màu dễ đọc hơn, tùy chỉnh nếu cần */
-  text-align: center;
-}
-
 
 .wheel {
   width: 300px;
@@ -50,10 +48,9 @@ h1 {
   top: 50%;
   left: 50%;
   transform-origin: 0 0;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
   color: #fff;
   pointer-events: none;
   text-shadow: 1px 1px 2px #000;
 }
-
