@@ -1,4 +1,4 @@
-const SCRIPT_URL = "YOUR_SCRIPT_URL"; // Thay bằng link Apps Script của bạn
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzgSbNlz7pa9ym0NPvhtIyd7TX4RjvfozpYRZE2u7Erl_I3jZ4oIBpslTIkfqUp2zeL_w/exec"; // Thay bằng link Apps Script của bạn
 
 const prizes = [
   { code: "A+", label: "1M", percent: 0.5 },
