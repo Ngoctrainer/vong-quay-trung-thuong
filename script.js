@@ -1,4 +1,4 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw9Dgjdy71QzIuUkItqHuWbZ0SHbiOJSSCnv2g9Ok65a0KQ_wYtJFaeE2LmvMrMrxep5Q/exec"; // Thay bằng link Apps Script của bạn
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzhCDR-xz0xc64Xcr1CgeOGdZ4g3bztzd83tnqnE-kaZcdyseT_GNARTyI5bbpeloOrmA/exec"; // Thay bằng link Apps Script của bạn
 
 // Gọi khi vòng quay được tạo ra, hoặc ngay sau khi DOM load
 const prizes = [
