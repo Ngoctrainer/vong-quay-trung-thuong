@@ -20,7 +20,7 @@ h1 {
   border-right: 15px solid transparent;
   border-bottom: 30px solid black;
   position: absolute;
-  top: 30px;
+  top: -30px;
   left: calc(50% - 15px);
 }
 
