@@ -14,15 +14,17 @@ h1 {
 }
 
 .pointer {
-  width: 0;
-  height: 0;
-  border-left: 15px solid transparent;
-  border-right: 15px solid transparent;
-  border-bottom: 30px solid black;
-  position: absolute;
-  top: -30px;
-  left: calc(50% - 15px);
+  display: none; /* Ẩn luôn mũi tên đen */
 }
+
+#resultMessage {
+  margin-top: 30px;  /* Cách vòng quay xa hơn (có thể tăng giá trị nếu muốn) */
+  font-size: 20px;   /* To hơn */
+  font-weight: bold; /* In đậm */
+  color: #333;       /* Màu dễ đọc hơn, tùy chỉnh nếu cần */
+  text-align: center;
+}
+
 
 .wheel {
   width: 300px;
