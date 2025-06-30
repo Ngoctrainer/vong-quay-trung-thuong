@@ -10,16 +10,25 @@
   <h1>Vòng Quay Đổi Sao Nhận Quà</h1>
 
   <div class="user-input">
-    <label for="username">MNS:</label>
-    <input type="text" id="username" placeholder="Nhập mã nhân sự của bạn" />
-    <button id="startBtn">Bắt đầu</button>
+    <label for="username">Mã nhân sự (MNS):</label>
+    <input type="text" id="username" placeholder="Nhập mã nhân sự" />
+    <button id="startBtn">Kiểm tra lượt</button>
   </div>
 
   <p id="spinInfo"></p>
 
   <div class="wheel-container">
     <div class="pointer"></div>
-    <div class="wheel" id="wheel"></div>
+    <div class="wheel" id="wheel">
+      <div class="label" style="transform: rotate(22.5deg)">1M</div>
+      <div class="label" style="transform: rotate(67.5deg)">500K</div>
+      <div class="label" style="transform: rotate(112.5deg)">300K</div>
+      <div class="label" style="transform: rotate(157.5deg)">200K</div>
+      <div class="label" style="transform: rotate(202.5deg)">100K</div>
+      <div class="label" style="transform: rotate(247.5deg)">50K</div>
+      <div class="label" style="transform: rotate(292.5deg)">20K</div>
+      <div class="label" style="transform: rotate(337.5deg)">10K</div>
+    </div>
   </div>
 
   <button id="spinBtn" disabled>Quay 🎁</button>
