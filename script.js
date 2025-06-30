@@ -29,7 +29,7 @@ startBtn.addEventListener('click', async () => {
 
   spinInfo.textContent = "Đang kiểm tra...";
   try {
-    const res = await fetch(`${SCRIPT_URL}?action=getSpins&username=${encodeURIComponent(username)}`);
+    const res = await fetch(`${SCRIPT_URL}?action=spin&username=${encodeURIComponent(usernameInput.value.trim())}&prize=${encodeURIComponent(selectedPrize.code)}`);
     const data = await res.json();
     if (data.success && data.spins !== undefined) {
       currentSpins = data.spins;
