@@ -78,11 +78,11 @@ button:disabled {
   height: 100%;
   top: 0;
   left: 0;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: bold;
   color: #fff;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   transform-origin: 50% 50%;
 }
