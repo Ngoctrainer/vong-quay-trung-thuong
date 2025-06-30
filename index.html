@@ -1,19 +1,31 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vòng quay trúng thưởng</title>
+  <title>Vòng Quay Đổi Sao Nhận Quà</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>Vòng quay trúng thưởng</h1>
-    <canvas id="wheelcanvas" width="500" height="500"></canvas>
-    <button onclick="spin()">Quay!</button>
-    <p id="result"></p>
+  <h1>Vòng Quay Đổi Sao Nhận Quà</h1>
+
+  <div class="user-input">
+    <label for="username">Moodle ID:</label>
+    <input type="text" id="username" placeholder="Nhập ID của bạn" />
+    <button id="startBtn">Bắt đầu</button>
   </div>
+
+  <p id="spinInfo"></p>
+
+  <div class="wheel-container">
+    <div class="pointer"></div>
+    <div class="wheel" id="wheel"></div>
+  </div>
+
+  <button id="spinBtn" disabled>Quay 🎁</button>
+
+  <div id="resultMessage"></div>
+
   <script src="script.js"></script>
 </body>
 </html>
