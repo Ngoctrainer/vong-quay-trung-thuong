@@ -38,7 +38,7 @@ h1 {
   font-size: 16px;
   text-shadow: 1px 1px 2px black;
   /* Căn chỉnh text lệch trái nhẹ cho đẹp */
-  transform: translate(-60%, -50%) rotate(var(--angle)) translate(110px) rotate(calc(-10 * var(--angle)));
+  transform: translate(-60%, -50%) rotate(var(--angle)) translate(110px) translateX(-30px) rotate(calc(-10 * var(--angle)));
 }
 
 
