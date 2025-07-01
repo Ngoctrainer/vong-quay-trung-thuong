@@ -1,81 +1,68 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzhCDR-xz0xc64Xcr1CgeOGdZ4g3bztzd83tnqnE-kaZcdyseT_GNARTyI5bbpeloOrmA/exec"; // Thay bằng link Apps Script của bạn
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbysFt9dwjxmia_yZFvdIHPQod273ZEyxC5Rbc2F3h17jCDvw0Umr9EgBtblNRvfX5ueTA/exec";  // Thay bằng URL Apps Script
 
-// Gọi khi vòng quay được tạo ra, hoặc ngay sau khi DOM load
-const prizes = [
-  { label: 'Voucher 1.000.000đ' },
-  { label: 'Voucher 500.000đ' },
-  { label: 'Voucher 300.000đ' },
-  { label: 'Voucher 200.000đ' },
-  { label: 'Voucher 100.000đ' },
-  { label: 'Voucher 50.000đ' },
-  { label: 'Voucher 20.000đ' },
-  { label: 'Voucher 10.000đ' }
-];
-
-const baseDeg = 360 / prizes.length;
+const usernameInput = document.getElementById('username');
+const startBtn = document.getElementById('startBtn');
+const spinBtn = document.getElementById('spinBtn');
+const spinInfo = document.getElementById('spinInfo');
 const wheel = document.getElementById('wheel');
-
-prizes.forEach((p, i) => {
-  const label = document.createElement('div');
-  label.className = 'label';
-  label.innerText = p.label;
-  label.style.transform = `rotate(${i * baseDeg + baseDeg / 2}deg) translate(100px) rotate(-${i * baseDeg + baseDeg / 2}deg)`;
-  wheel.appendChild(label);
-});
+const resultMessage = document.getElementById('resultMessage');
 
 let currentSpins = 0;
 
 startBtn.addEventListener('click', async () => {
   const username = usernameInput.value.trim();
   if (!username) {
-    alert("Vui lòng nhập MNS!");
+    alert("Vui lòng nhập mã nhân sự!");
     return;
   }
-  spinInfo.textContent = "Đang kiểm tra lượt...";
+
+  spinInfo.textContent = "Đang kiểm tra...";
   try {
     const res = await fetch(`${SCRIPT_URL}?action=getSpins&username=${encodeURIComponent(username)}`);
     const data = await res.json();
     if (data.success) {
       currentSpins = data.spins;
       spinInfo.textContent = `Bạn còn ${currentSpins} lượt quay.`;
-      spinBtn.disabled = currentSpins > 0 ? false : true;
+      spinBtn.disabled = currentSpins <= 0;
     } else {
-      spinInfo.textContent = "Không tìm thấy MNS.";
+      spinInfo.textContent = "Không tìm thấy mã nhân sự hoặc lỗi server.";
       spinBtn.disabled = true;
     }
-  } catch {
-    spinInfo.textContent = "Lỗi server.";
+  } catch (err) {
+    console.error(err);
+    spinInfo.textContent = "Lỗi kết nối server.";
   }
 });
 
 spinBtn.addEventListener('click', async () => {
   if (currentSpins <= 0) return;
+
   spinBtn.disabled = true;
 
-  let r = Math.random() * 100;
-  let selectedPrize = prizes.find(p => {
-    r -= p.percent;
-    return r < 0;
-  }) || prizes[prizes.length - 1];
-
-  const index = prizes.indexOf(selectedPrize);
-  const rotateDeg = 1800 + index * baseDeg + baseDeg / 2;
+  const rotateDeg = 1800 + Math.random() * 360;
   wheel.style.transform = `rotate(${rotateDeg}deg)`;
 
-  setTimeout(async () => {
-    try {
-      const res = await fetch(`${SCRIPT_URL}?action=spin&username=${encodeURIComponent(usernameInput.value.trim())}&prize=${encodeURIComponent(selectedPrize.code)}`);
-      const data = await res.json();
+  try {
+    const res = await fetch(`${SCRIPT_URL}?action=spin&username=${encodeURIComponent(usernameInput.value.trim())}`);
+    const data = await res.json();
+
+    setTimeout(() => {
       if (data.success) {
-        resultMessage.textContent = `Bạn trúng: ${data.prize}`;
         currentSpins = data.spins;
         spinInfo.textContent = currentSpins > 0 ? `Bạn còn ${currentSpins} lượt quay.` : "Bạn đã hết lượt quay.";
+        resultMessage.textContent = `Bạn trúng: ${data.prize}`;
       } else {
-        resultMessage.textContent = "Lỗi quay số.";
+        resultMessage.textContent = "Lỗi khi quay.";
       }
-    } catch {
-      resultMessage.textContent = "Lỗi kết nối.";
-    }
-    spinBtn.disabled = currentSpins > 0 ? false : true;
-  }, 4000);
+    }, 4000);
+  } catch (err) {
+    console.error(err);
+    resultMessage.textContent = "Lỗi kết nối.";
+  } finally {
+    setTimeout(() => {
+      if (currentSpins > 0) {
+        spinBtn.disabled = false;
+      }
+    }, 4500);
+  }
 });
