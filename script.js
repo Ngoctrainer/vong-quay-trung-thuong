@@ -12,23 +12,28 @@ let currentSpins = 0;
 startBtn.addEventListener('click', async () => {
   const username = usernameInput.value.trim();
   if (!username) {
-    alert("Vui lòng nhập MNS!");
+    alert("Vui lòng nhập mã nhân sự!");
     return;
   }
-  spinInfo.textContent = "Đang kiểm tra...";
+
+  spinInfo.textContent = "Đang kiểm tra lượt quay...";
   try {
     const res = await fetch(`${SCRIPT_URL}?action=getSpins&username=${encodeURIComponent(username)}`);
     const data = await res.json();
+
     if (data.success) {
       currentSpins = data.spins;
-      spinInfo.textContent = `Bạn còn ${currentSpins} lượt quay.`;
+      spinInfo.textContent = currentSpins > 0
+        ? `Bạn còn ${currentSpins} lượt quay.`
+        : "Bạn đã hết lượt quay.";
       spinBtn.disabled = currentSpins <= 0;
     } else {
-      spinInfo.textContent = "Không tìm thấy MNS.";
+      spinInfo.textContent = "Không tìm thấy username hoặc lỗi server.";
       spinBtn.disabled = true;
     }
-  } catch (e) {
-    spinInfo.textContent = "Lỗi kết nối.";
+  } catch (err) {
+    console.error(err);
+    spinInfo.textContent = "Lỗi kết nối server.";
     spinBtn.disabled = true;
   }
 });
@@ -40,41 +45,46 @@ spinBtn.addEventListener('click', async () => {
   resultMessage.textContent = "";
 
   const prizes = [
-    { code: "A+", percent: 0.5 },
-    { code: "A", percent: 2 },
-    { code: "B", percent: 5 },
-    { code: "C", percent: 5 },
-    { code: "D", percent: 10 },
-    { code: "E", percent: 10 },
-    { code: "F", percent: 17.5 },
-    { code: "G", percent: 50 }
+    { code: "A+", name: "Voucher 1.000.000đ", percent: 0.5 },
+    { code: "A", name: "Voucher 500.000đ", percent: 2 },
+    { code: "B", name: "Voucher 300.000đ", percent: 5 },
+    { code: "C", name: "Voucher 200.000đ", percent: 5 },
+    { code: "D", name: "Voucher 100.000đ", percent: 10 },
+    { code: "E", name: "Voucher 50.000đ", percent: 10 },
+    { code: "F", name: "Voucher 20.000đ", percent: 17.5 },
+    { code: "G", name: "Voucher 10.000đ", percent: 50 }
   ];
 
+  // Xác định giải thưởng
   let r = Math.random() * 100;
   let selectedPrize = prizes.find(p => {
     r -= p.percent;
     return r < 0;
   }) || prizes[prizes.length - 1];
 
+  // Tính góc quay
   const index = prizes.indexOf(selectedPrize);
-  const baseDeg = 360 / prizes.length;
-  const rotateDeg = 1800 + (index * baseDeg) + Math.random() * baseDeg;
-  wheel.style.transform = `rotate(${rotateDeg}deg)`;
+  const slice = 360 / prizes.length;
+  const randomExtra = Math.random() * slice;
+  const targetAngle = 360 * 5 + (index * slice) + randomExtra;
+
+  // Quay vòng quay
+  wheel.style.transition = "transform 5s ease-out";
+  wheel.style.transform = `rotate(${targetAngle}deg)`;
 
   setTimeout(async () => {
+    resultMessage.textContent = `Bạn trúng: ${selectedPrize.name}`;
     try {
       const res = await fetch(`${SCRIPT_URL}?action=spin&username=${encodeURIComponent(usernameInput.value.trim())}&prize=${selectedPrize.code}`);
       const data = await res.json();
-      if (data.success) {
-        currentSpins = data.spins;
-        resultMessage.textContent = `Bạn trúng: ${data.prize}`;
-        spinInfo.textContent = currentSpins > 0 ? `Bạn còn ${currentSpins} lượt quay.` : "Bạn đã hết lượt quay.";
-      } else {
-        resultMessage.textContent = "Lỗi khi quay.";
-      }
-    } catch (e) {
-      resultMessage.textContent = "Lỗi kết nối.";
+      currentSpins = data.spins || 0;
+      spinInfo.textContent = currentSpins > 0
+        ? `Bạn còn ${currentSpins} lượt quay.`
+        : "Bạn đã hết lượt quay.";
+    } catch (err) {
+      console.error(err);
+      resultMessage.textContent = "Lỗi ghi nhận kết quả.";
     }
-    spinBtn.disabled = currentSpins <= 0;
-  }, 4000);
+    if (currentSpins > 0) spinBtn.disabled = false;
+  }, 5000);
 });
