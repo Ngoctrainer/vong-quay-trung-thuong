@@ -40,18 +40,6 @@ h1 {
   /* Căn chỉnh text lệch trái nhẹ cho đẹp */
   transform: translate(-60%, -50%) rotate(var(--angle)) translate(90px) translateX(-30px) rotate(calc(-10 * var(--angle)));
 }
-.pointer {
-  position: absolute;
-  top: -25px;  /* Đặt mũi tên lên phía trên vòng quay */
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 20px solid transparent;
-  border-right: 20px solid transparent;
-  border-bottom: 30px solid red;  /* Mũi tên đỏ */
-  z-index: 10;
-}
 
 #spinBtn {
   margin-top: 20px;
