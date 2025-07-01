@@ -63,14 +63,19 @@ spinBtn.addEventListener('click', async () => {
   }) || prizes[prizes.length - 1];
 
   // Tính góc quay
-  const index = prizes.indexOf(selectedPrize);
   const slice = 360 / prizes.length;
-  const randomExtra = Math.random() * slice;
-  const targetAngle = 360 * 5 + (index * slice) + randomExtra;
+const index = prizes.indexOf(selectedPrize);
 
-  // Quay vòng quay
-  wheel.style.transition = "transform 5s ease-out";
-  wheel.style.transform = `rotate(${targetAngle}deg)`;
+// Góc chính xác của giải
+const prizeAngle = index * slice + slice / 2; // Lấy giữa slice
+
+// Quay ngẫu nhiên 5-7 vòng
+const extraSpins = Math.floor(Math.random() * 3 + 5) * 360;
+
+const targetAngle = extraSpins + prizeAngle;
+
+wheel.style.transition = "transform 5s ease-out";
+wheel.style.transform = `rotate(${targetAngle}deg)`;
 
   setTimeout(async () => {
     resultMessage.textContent = `Bạn trúng: ${selectedPrize.name}`;
