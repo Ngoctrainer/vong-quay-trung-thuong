@@ -30,15 +30,16 @@ h1 {
 }
 .label {
   position: absolute;
-  left: 50%;
   top: 50%;
+  left: 50%;
   transform-origin: 0 0;
-  color: #fff;
+  font-size: 14px;
   font-weight: bold;
-  font-size: 12px;
-  white-space: nowrap;
-  text-shadow: 1px 1px 2px #000;
+  color: white;
+  text-shadow: 1px 1px 2px black;
+  transform: rotate(...) translate(110px, -10px) rotate(...);
 }
+
 
 #spinBtn {
   margin-top: 20px;
