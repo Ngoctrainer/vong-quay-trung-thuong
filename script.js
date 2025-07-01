@@ -74,8 +74,15 @@ const extraSpins = Math.floor(Math.random() * 3 + 5) * 360;
 
 const targetAngle = extraSpins + prizeAngle;
 
-wheel.style.transition = "transform 5s ease-out";
-wheel.style.transform = `rotate(${targetAngle}deg)`;
+// Reset trước khi quay
+wheel.style.transition = "none";
+wheel.style.transform = "rotate(0deg)";
+
+setTimeout(() => {
+  wheel.style.transition = "transform 5s ease-out";
+  wheel.style.transform = `rotate(${targetAngle}deg)`;
+}, 50);
+
 
   setTimeout(async () => {
     resultMessage.textContent = `Bạn trúng: ${selectedPrize.name}`;
